@@ -1,0 +1,32 @@
+{
+  "name": "social-app",
+  "version": "1.0.0",
+  "description": "Social App Creation",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "naurangi",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "express": "^4.21.1",
+    "express-fileupload": "^1.5.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.7.2",
+    "morgan": "^1.10.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "path": "^0.12.7",
+    "socket.io": "^4.8.0"
+  },
+  "devDependencies": {
+    "node": "^22.10.0",
+    "nodemon": "^3.1.7"
+  }
+}
