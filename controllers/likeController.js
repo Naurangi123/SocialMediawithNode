@@ -1,9 +1,5 @@
-// backend/controllers/likeController.js
 const Post = require('../models/Post');
 
-// @desc    Like a post
-// @route   POST /api/likes/:postId
-// @access  Private
 exports.likePost = async (req, res) => {
   const { postId } = req.params;
 
@@ -28,9 +24,6 @@ exports.likePost = async (req, res) => {
   }
 };
 
-// @desc    Dislike a post
-// @route   POST /api/dislikes/:postId
-// @access  Private
 exports.dislikePost = async (req, res) => {
   const { postId } = req.params;
 

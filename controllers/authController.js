@@ -1,16 +1,17 @@
-// backend/controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-// Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-};
+const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-// @desc    Register new user
-// @route   POST /api/auth/register
-// @access  Public
+const formatUserResponse = (user) => ({
+  id: user._id,
+  username: user.username,
+  email: user.email,
+  bio: user.bio,
+  profilePic: user.profilePic,
+});
+
 exports.registerUser = async (req, res) => {
   const { username, email, password, bio, profilePic } = req.body;
 
@@ -22,29 +23,25 @@ exports.registerUser = async (req, res) => {
     await user.save();
 
     const token = generateToken(user._id);
-    res.status(201).json({ token, user: { id: user._id, username, email, bio, profilePic } });
-    console.log("token", token);
+    res.status(201).json({ token, user: formatUserResponse(user) });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
+// Login User
 exports.loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ username: username });
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
     const isMatch = await user.matchPassword(password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
     const token = generateToken(user._id);
-    res.json({ token, user: { id: user._id, username: user.username, email, bio: user.bio, profilePic: user.profilePic } });
-    console.log("token", token);
+    res.json({ token, user: formatUserResponse(user) });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }

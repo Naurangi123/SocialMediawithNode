@@ -1,21 +1,20 @@
-
-
-// Import required modules
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const http = require('http');
 const socketIo = require('socket.io');
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
 // console.log('JWT Secret:', process.env.JWT_SECRET);
-
 // Initialize Express
 const app = express();
 
 // Middleware
+app.use(bodyParser.urlencoded({extends:true}));
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
 
@@ -32,7 +31,6 @@ app.use('/api/comments', commentRoutes);
 app.use('/api', likeRoutes); // likeRoutes handles /likes/:postId and /dislikes/:postId
 app.use('/api/messages', messageRoutes);
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -56,7 +54,7 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', ({ senderId, receiverId }) => {
     const room = [senderId, receiverId].sort().join('_');
     socket.join(room);
-    console.log(`User joined room: ${room}`);
+    // console.log(`User joined room: ${room}`);
   });
 
   // Handle sending messages
@@ -72,4 +70,4 @@ io.on('connection', (socket) => {
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));

@@ -1,30 +1,30 @@
-// backend/controllers/postController.js
 const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 
-// @desc    Create a new post
-// @route   POST /api/posts
-// @access  Private
 exports.createPost = async (req, res) => {
-  const { content, image } = req.body;
+  const { title, content } = req.body;
+  const image = req.file; 
+  if (!title || !content || !image) {
+    return res.status(400).json({ message: 'Please provide all fields' });
+  }
 
   try {
     const post = new Post({
       author: req.user._id,
-      content,
-      image,
+      title: title,
+      content: content,
+      image: image.filename 
     });
 
     await post.save();
     res.status(201).json(post);
   } catch (err) {
+    console.error(err); 
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-// @desc    Get all posts
-// @route   GET /api/posts
-// @access  Public
+
 exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
@@ -41,9 +41,6 @@ exports.getPosts = async (req, res) => {
   }
 };
 
-// @desc    Delete a post
-// @route   DELETE /api/posts/:id
-// @access  Private
 exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);

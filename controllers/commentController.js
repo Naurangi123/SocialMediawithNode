@@ -1,9 +1,6 @@
 const Comment = require('../models/Comment');
 const Post = require('../models/Post');
 
-// @desc    Add a comment to a post
-// @route   POST /api/comments/:postId
-// @access  Private
 exports.addComment = async (req, res) => {
   const { content } = req.body;
   const { postId } = req.params;

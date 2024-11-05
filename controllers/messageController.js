@@ -1,10 +1,6 @@
-// backend/controllers/messageController.js
 const Message = require('../models/Message');
 const User = require('../models/User');
 
-// @desc    Send a message
-// @route   POST /api/messages
-// @access  Private
 exports.sendMessage = async (req, res) => {
   const { receiverId, content } = req.body;
 
@@ -25,9 +21,6 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
-// @desc    Get messages between users
-// @route   GET /api/messages/:userId
-// @access  Private
 exports.getMessages = async (req, res) => {
   const { userId } = req.params;
 
