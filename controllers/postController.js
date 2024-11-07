@@ -1,25 +1,36 @@
 const Post = require('../models/Post');
+const User = require('../models/User');
 const Comment = require('../models/Comment');
 
 exports.createPost = async (req, res) => {
   const { title, content } = req.body;
-  const image = req.file; 
+  const image = req.file;
+
   if (!title || !content || !image) {
     return res.status(400).json({ message: 'Please provide all fields' });
   }
 
+  const user = await User.findById(req.user._id); 
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+  console.log("Authenticated user from Controller:", req.user._id); 
+
   try {
     const post = new Post({
-      author: req.user._id,
-      title: title,
-      content: content,
-      image: image.filename 
+      user: req.user._id,  
+      title,
+      content,
+      image: image ? image.filename : null,
     });
 
     await post.save();
     res.status(201).json(post);
+    console.log("post", post);
+    (post)
   } catch (err) {
-    console.error(err); 
+    console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -28,10 +39,10 @@ exports.createPost = async (req, res) => {
 exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate('author', 'username profilePic')
+      .populate('user', 'username profilePic')
       .populate({
         path: 'comments',
-        populate: { path: 'author', select: 'username profilePic' }
+        populate: { path: 'user', select: 'username profilePic' }
       })
       .sort({ createdAt: -1 });
 

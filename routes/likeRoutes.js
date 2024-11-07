@@ -2,9 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const { likePost, dislikePost } = require('../controllers/likeController');
-const authMiddleware = require('../middleware/authMiddleware');
+const {generateToken,authMiddleware} = require('../middleware/authMiddleware');
 
-router.post('/likes/:postId', authMiddleware, likePost);
-router.post('/dislikes/:postId', authMiddleware, dislikePost);
+router.post('/likes/:postId', generateToken,authMiddleware, likePost);
+router.post('/dislikes/:postId', generateToken,authMiddleware, dislikePost);
 
 module.exports = router;

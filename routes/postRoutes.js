@@ -1,13 +1,11 @@
-// backend/routes/postRoutes.js
 const express = require('express');
 const router = express.Router();
 const { createPost, getPosts, deletePost } = require('../controllers/postController');
-const authMiddleware = require('../middleware/authMiddleware');
+const {authMiddleware,generateToken} = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); 
 
-router.post('/',upload.single('image'), createPost);
+router.post('/createPost',generateToken,authMiddleware,upload.single("image"), createPost);
 router.get('/', getPosts);
 router.delete('/:id', authMiddleware, deletePost);
 
