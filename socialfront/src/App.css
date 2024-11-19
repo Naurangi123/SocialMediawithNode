@@ -1,0 +1,180 @@
+.App {
+  text-align: center;
+}
+
+.form-register{
+  margin-top: 50px;
+  width: 300px;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  margin-left: 30rem;
+}
+.form-register input{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+h3{
+  font-size: 24px;
+  align-items: center;
+}
+
+.form-register button{
+  width: 100%;
+  padding: 14px 20px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+.posts-container{
+  margin: 10px;
+
+}
+.post{
+  margin-top: 50px;
+  width: 400px;
+  padding: 10px;
+  background-color: #ec9494;
+  border-radius: 5px;
+  margin-left: 30rem;
+}
+.post-item {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 8px;
+}
+
+.username-container {
+  display: flex;
+  align-items: center;
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.post-content {
+  margin: 16px 0;
+}
+
+.post-image {
+  width: 100%;
+  height: 350px;
+  border-radius: 8px
+}
+span{
+  text-transform: capitalize;
+}
+
+.like-dislike-container {
+  display: flex;
+  gap: 100px;
+  
+}
+
+.like-button,
+.dislike-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.like-button {
+  background-color: #ec9494; 
+  color: rgb(19, 4, 4);
+}
+.dislike-button {
+  background-color: #ec9494; 
+  color: rgb(11, 3, 3);
+}
+
+nav {
+  background-color: #78b95f;
+  padding: 10px;
+  border-bottom: 1px solid #8474e3;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  flex-direction: row;
+}
+ul li {
+  list-style-type: none;
+  margin-right: 80px;
+  padding: 10px;
+}
+
+li a {
+  text-decoration: none;
+  color: #007bff;
+  padding: 10px;
+  border: #4CAF50;
+  border-radius: 5px;
+}
+
+nav a:hover {
+  text-decoration: none;
+  color: #0056b3;
+  transition: color 0.3s ease;
+  background-color: #4CAF50;
+}
+
+form{
+  margin-top: 50px;
+  width: 300px;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  margin-left: 30rem;
+}
+
+form label{
+  display: block;
+  margin-bottom: 10px;
+}
+form input[type="text"]{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+input[type="text"]::-moz-placeholder{
+  color: #999;
+}
+.profile{
+  margin-top: 50px;
+  width: 300px;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  margin-left: 30rem;
+  margin-bottom: 10px;
+}
+.profile h2,h4{
+  margin-bottom: 10px;
+  text-align: center;
+}
+.profile img{
+  width: 100%;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+}
