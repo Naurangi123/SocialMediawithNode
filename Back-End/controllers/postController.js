@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 exports.createPost = async (req, res) => {
   const { title, content } = req.body;
-  const user = await User.findById(req.user._id); 
+  const user = await User.findById(req.user); 
   if (!user) {
     return res.status(401).json({ message: "User not found" });
   }
@@ -16,7 +16,7 @@ exports.createPost = async (req, res) => {
   }
   try {
     const post = new Post({
-      user: req.user._id,  
+      user: req.user,  
       title: title,
       content: content,
       image: image ? image.filename : req.body.image 
@@ -33,17 +33,17 @@ exports.createPost = async (req, res) => {
 exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.find({})
-      .populate('user', 'username profilePic bio')  // Populate the user for the post itself
+      .populate('user', 'username profilePic bio') 
       .populate({
         path: 'comments',
         populate: { 
           path: 'user', 
-          select: 'username profilePic'  // Populate the user for each comment
+          select: 'username profilePic' 
         }
       })
       .sort({ createdAt: -1 });
 
-    return res.json({ posts });
+    return res.json(posts);
   } catch (err) {
     res.status(500).json({ message: 'Server error', err: err.message });
   }
@@ -68,20 +68,29 @@ exports.getPost = async (req, res) => {
 exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (!post) return res.status(404).json({ message: 'Post not found' });
 
-    if (post.author.toString() !== req.user._id.toString()) {
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    console.log('Post user ID:', post.user.toString());
+    console.log('Current user ID:', req.user._id.toString());
+
+    if (post.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'User not authorized' });
     }
 
     await Comment.deleteMany({ post: post._id });
-    await post.remove();
+
+    await Post.findByIdAndDelete(req.params.id);
 
     res.json({ message: 'Post removed' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 
 exports.likePost= async (req, res) => {

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { addComment } = require('../controllers/commentController');
-const authenticate = require('../middleware/authMiddleware');
+const {protect} = require('../middleware/authMiddleware');
 
-router.post('/:postId', authenticate, addComment);
+router.post('/:postId', protect, addComment);
 
 module.exports = router;

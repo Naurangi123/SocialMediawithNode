@@ -29,7 +29,7 @@ const App = () => {
     <Router>
       <Navbar/>
        <Routes>
-       <Route path="/" element={<ProtectedRoute><PostPage /></ProtectedRoute>}/>
+        <Route path="/" element={<PostPage />}/>
         <Route path="/createpost" element={<ProtectedRoute><CreatePost /></ProtectedRoute>}/>
         <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
         <Route path="/post/:id" element={<ProtectedRoute><PostDetailPage /></ProtectedRoute>}/> 

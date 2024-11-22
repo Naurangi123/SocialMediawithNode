@@ -1,82 +1,131 @@
+const { promisify }=require('util')
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-exports.registerUser = async (req, res) => {
-  const { username, email, password, bio } = req.body;
+
+const signToken=(id)=>{
+  return jwt.sign({ id }, process.env.JWT_SECRET, { 
+    expiresIn: process.env.JWT_EXPIRES 
+  });
+}
+
+
+
+exports.signUp = async (req, res) => {
+  const { username, email, password, confirmPassword, bio} = req.body;
+
   try {
-    let user = await User.findOne({ username });
-    if (user) {
+    const userExists = await User.findOne({ username });
+    if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
-    const profilePic = req.file; 
 
-    if (!profilePic && !req.body.profilePic) {
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: 'Passwords do not match' });
+    }
+    const photo = req.file; 
+
+    if (!photo && !req.body.photo) {
       return res.status(400).json({ message: "No image uploaded" });
     }
-
-    user = new User({
+    const user = new User({
       username,
       email,
       password,
+      confirmPassword,
       bio,
-      profilePic: profilePic ? profilePic.filename : req.body.profilePic, 
+      photo: photo ? photo.filename : req.body.photo,
     });
 
     await user.save();
 
-    return res.status(201).json({ user});
+    const token = signToken(user._id);
+    
+
+    return res.status(201).json({
+      status: 'Success',
+      data: {
+        user: user,
+        token,
+      },
+    });
   } catch (err) {
     console.log(err.message);
-    
-    return res.status(500).json({ message: 'Server error'});
+    return res.status(500).json({ message: 'Server error' });
   }
 };
+
 // Login User
-exports.loginUser = async (req, res) => {
+exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ username });
-    if (!user){
-      return res.status(400).json({ message: 'Invalid credentials' });
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Please provide both username and password' });
     }
 
-    const isMatch = await user.matchPassword(password);
-    if (!isMatch){
-      return res.status(400).json({ message: 'Invalid credentials' });
+    const user = await User.findOne({ username }).select('+password');
+
+    if (!user || !(await user.correctPassword(password, user.password))) {
+      return res.status(401).json({ message: 'Invalid username or password' });
     }
-    const token = jwt.sign({ _id: user._id },process.env.JWT_SECRET,{ expiresIn: '24h' });
-  
-    return res.json({message:"Authentication successful",token})
+
+    const token = signToken(user._id);
+
+    return res.json({
+      status: 'Success',
+      user:user.username,
+      token,
+    });
   } catch (err) {
     return res.status(500).json({ message: 'Server error' });
   }
 };
 
-exports.getUserProfile = async (req, res, next) => {
-  try {
-    if (!req.user || !req.user._id) {
-      return res.status(401).json({ message: 'User not logged in' });
-    }
-    // console.log('User ID:', req.user._id);
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+// exports.protect=async(req,res,next)=>{
 
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
-  }
-};
+//   // Getting token and check of it's there
+//   let token;
+//   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+//     token = req.headers.authorization.split(' ')[1];
+//   }
+//   if(!token){
+//     return res.status(401).json({ 
+//       message: 'No token, authorization denied' 
+//     });
+//   }
+//   // Verification token
+//   const decode = await promisify(jwt.verify)(token,process.env.JWT_SECRET)
+//   // console.log(decode);
+  
+//   // check if user still exists
+//   const currentUser = await User.findById(decode.id)
 
-exports.logOut = async (req, res) => {
-  try {
-    // Inform the client that logout was successful
-    res.status(200).json({ message: 'Logged out successfully' });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
-  }
-};
+//   if(!currentUser){
+//     return res.status(401).json({
+//       message: 'User no longer exists'
+//     })
+//   }
+//   // checknnif user change password after the jwt issued
+//   if(currentUser.changePasswordAfter(decode.iat)){
+//     return res.status(401).json({
+//       message: 'User has changed password after jwt issued Login again'
+//     })
+//   }
+
+//   // Grant authorization to the user
+//   req.user=currentUser;
+
+//   next();
+// }
+exports.userProfile=async(req,res)=>{
+  const user=await User.findOne(req.user);
+  res.json({
+    status:'success',
+    user
+  });
+  console.log(user);
+  
+}

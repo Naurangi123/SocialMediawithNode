@@ -1,24 +1,40 @@
+const { promisify } = require('util')
 const jwt = require('jsonwebtoken');
 const User=require('../models/User');
 require('dotenv').config()
 
-const authenticate = async(req, res, next) => {
-  const token = req.header('Authorization')?.split(' ')[1];
-  // const token = req.headers.authorization?.split(' ')[1]; 
+exports.protect=async(req,res,next)=>{
 
-  if (!token) {
-      return res.status(401).json({ message: 'Access denied. No token provided.' });
+  // Getting token and check of it's there
+  let token;
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
   }
-  try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    //   console.log("decoded from middleware",decoded,"Token",token);
-      req.user =  decoded;  
-    //   console.log("user from middleware",req.user);
-      
-      next(); 
-  } catch (err) {
-      return res.status(400).json({ message: 'Invalid token' });
+  if(!token){
+    return res.status(401).json({ 
+      message: 'No token, authorization denied' 
+    });
   }
-};
+  // Verification token
+  const decode = await promisify(jwt.verify)(token,process.env.JWT_SECRET)
+  // console.log(decode);
+  // check if user still exists
+  const currentUser = await User.findById(decode.id)
 
-module.exports = authenticate;
+  if(!currentUser){
+    return res.status(401).json({
+      message: 'User no longer exists'
+    })
+  }
+  // check if user change password after the jwt issued
+  if(currentUser.changePasswordAfter(decode.iat)){
+    return res.status(401).json({
+      message: 'User has changed password after jwt issued Login again'
+    })
+  }
+
+  // Grant authorization to the user
+  req.user=currentUser;
+
+  next();
+}
