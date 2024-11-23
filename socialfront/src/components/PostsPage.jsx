@@ -12,7 +12,6 @@ const PostPage = () => {
     try {
       const response = await api.get('/api/posts');
       console.log(response.data);
-      
       setPosts(response.data);
       setLoading(false);
     } catch (err) {
@@ -36,16 +35,13 @@ const PostPage = () => {
   }
 
   return (
-    // posts.map((post) => (
-    //   <p>{post.title}</p>
-    // ))
     <div className="post-container">
       {posts.map((post) => (
         <div key={post._id} className="post" onClick={() => handlePostClick(post._id)}>
           <div className="username-container img">
             <img
               className="user-image"
-              src={`http://localhost:8000/uploads/${post.user.profilePic}`}
+              src={`http://localhost:8000/uploads/${post.user.photo}`}
               alt={post.user.username}
             />
             <span>{post.user.username}</span>

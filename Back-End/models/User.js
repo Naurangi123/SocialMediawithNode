@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const { mainModule } = require('process');
 
 const UserSchema = new mongoose.Schema({
   username: { 
@@ -35,7 +34,7 @@ const UserSchema = new mongoose.Schema({
   },
   photo: { 
     type: String, 
-    default: '' 
+    default: ''
   },
 }, { timestamps: true });
 
