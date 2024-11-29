@@ -10,7 +10,6 @@ exports.createPost = async (req, res) => {
     return res.status(401).json({ message: "User not found" });
   }
   const image = req.file; 
-
   if (!image && !req.body.image) {
     return res.status(400).json({ message: "No image uploaded" });
   }

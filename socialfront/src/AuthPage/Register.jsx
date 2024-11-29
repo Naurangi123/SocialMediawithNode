@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../api';
+import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -8,7 +8,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
   const [bio, setBio] = useState('');
-  const [photo, setPhoto] = useState('');
+  const [photo, setPhoto] = useState(null);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -61,7 +61,7 @@ const Register = () => {
           type="file"
           placeholder="Selected File"
           value={photo}
-          onChange={(e) => setPhoto(e.target.value)}
+          onChange={(e) => setPhoto(e.target.files[0])}
         />
         <button type="submit">Register</button>
         {error && <p>{error}</p>}

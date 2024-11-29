@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../api';
+import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const PostPage = () => {
@@ -38,35 +38,16 @@ const PostPage = () => {
     <div className="post-container">
       {posts.map((post) => (
         <div key={post._id} className="post" onClick={() => handlePostClick(post._id)}>
-          <div className="username-container img">
-            <img
-              className="user-image"
-              src={`http://localhost:8000/uploads/${post.user.photo}`}
-              alt={post.user.username}
-            />
-            <span>{post.user.username}</span>
+          <div className="post_header">
+            <img src={`http://localhost:8000/uploads/${post.user.photo}`} alt={post.user.username} className="user-avatar" />
+            <span className="username">{post.user.username}</span>
+            <span className="timestamp">{post.createdAt.toLocaleString()}</span>
           </div>
-          <hr />
-          <div className="post-image">
-            <img
-              className="post-image"
-              src={`http://localhost:8000/uploads/${post.image}`}
-              alt={post.title}
-            />
+          <div className="post_image">
+            <img src={`http://localhost:8000/uploads/${post.image}`} alt={post.user.username}/>
           </div>
-          <hr />
           <div className="post-content">
-            <p>{post.content}</p>
-          </div>
-          <hr />
-          <div className="like-dislike-container">
-            <p>
-              <span>👍{post.likeCount}</span>
-            </p>
-            <p>
-              <span>👎{post.dislikeCount}</span>
-            </p>
-              <p>💬: {post.comments.length}</p>
+            <p className="username">{post.content}</p>
           </div>
         </div>
       ))}

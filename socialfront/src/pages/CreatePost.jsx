@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api from '../services/api';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
@@ -22,10 +22,11 @@ const CreatePost = () => {
       try {
         const response = await api.get('/api/auth/user', {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         setUser(response.data);
+        console.log(response.data);
       } catch (err) {
         setError('Failed to fetch user profile.');
       }

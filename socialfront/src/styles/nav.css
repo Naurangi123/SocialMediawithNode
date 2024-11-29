@@ -1,0 +1,43 @@
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: beige;
+}
+nav{
+    display: flex;
+    align-items: center;
+    background-color: blue;
+}
+
+nav ul{
+    display: flex;
+    list-style-type: none;
+    padding: 10px;
+    margin: 10px;
+}
+
+nav ul li{
+    margin-right: 50px;
+    background-color: brown;
+    padding: 5px 40px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+nav ul li a{
+    color: white;
+    text-decoration: none;
+}
+li:hover{
+    background-color: red;
+    cursor: pointer;
+}

@@ -124,8 +124,7 @@ exports.userProfile=async(req,res)=>{
   const user=await User.findOne(req.user);
   res.json({
     status:'success',
-    user
+    user:user
   });
-  console.log(user);
   
 }
