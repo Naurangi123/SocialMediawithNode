@@ -1,34 +1,54 @@
-import { Navigate } from "react-router-dom";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PostPage from "./components/PostsPage";
-import CreatePost from "./components/CreatePost";
-import Navbar from "./components/Navbar";
-import UserProfile from "./components/UserProfile";
-import ProtectedRoute from "./components/ProtectedRoute";
-import PostDetailPage from "./components/PostDetailPage";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
+import ProtectedRoute from './components/ProtectedRoute';
+import PostsPage from './components/PostsPage';
+import Navbar from './components/Navbar';
+import CreatePost from './components/CreatePost';
+import PostDetailPage from './components/PostDetailPage';
 
-
-function Logout(){
-  localStorage.clear()
-  return <Navigate to="/login" />
+function LogOut() {
+  localStorage.removeItem('token');
+  return <Login path="/login"/>
 }
 
-function App() {
+
+const App = () => {
   return (
-      <Router>
-        <Navbar/>
-          <Routes>
-            <Route 
-            path="/" 
-            element={<ProtectedRoute><PostPage /></ProtectedRoute>} 
-          />
-            <Route path="/createpost" element={<CreatePost />}/>
-           <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-            <Route path="/post/:id" element={<ProtectedRoute><PostDetailPage /></ProtectedRoute>}/> 
-            <Route path="/logout" element={<Logout />} />
-          </Routes>
-      </Router>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/createpost"
+          element={
+            <ProtectedRoute>
+              <CreatePost />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <PostsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/post/:id"
+          element={
+            <ProtectedRoute>
+              <PostDetailPage/>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/logout" element={<LogOut />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
