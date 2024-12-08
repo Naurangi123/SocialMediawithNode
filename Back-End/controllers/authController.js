@@ -41,14 +41,10 @@ exports.signUp = async (req, res) => {
 
     await user.save();
 
-    const token = signToken(user._id);
-    
-
     return res.status(201).json({
       status: 'Success',
       data: {
-        user: user,
-        token,
+        user: user
       },
     });
   } catch (err) {
@@ -66,13 +62,15 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Please provide both username and password' });
     }
 
-    const user = await User.findOne({ username }).select('+password');
+    const user = await User.findOne({ username:username});
 
     if (!user || !(await user.correctPassword(password, user.password))) {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
 
     const token = signToken(user._id);
+    // console.log(token);
+    req.session.token = token;
 
     return res.json({
       status: 'Success',

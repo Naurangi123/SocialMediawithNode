@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setIsLoggedIn,setUser}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,7 +12,11 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await api.post('/api/auth/login', { username, password });
-      localStorage.setItem('token', response.data.token);
+      const token=response.data.token;
+      console.log(token);
+      sessionStorage.setItem('token',token)
+      setIsLoggedIn(true);
+      setUser({username})
       navigate('/');
     } catch (error) {
       setError('Invalid credentials');

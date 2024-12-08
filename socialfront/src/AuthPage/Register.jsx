@@ -18,10 +18,12 @@ const Register = () => {
       const response=await api.post('/api/auth/signUp', { username,email, password,confirmPassword,bio,photo });
       console.log(response.data);
       navigate('/login'); 
-    } catch (error) {
-      setError('Registration failed');
+    } catch (err) {
+      setError(err.response.data.message ||'Registration failed');
     }
   };
+
+
 
   return (
     <div>
