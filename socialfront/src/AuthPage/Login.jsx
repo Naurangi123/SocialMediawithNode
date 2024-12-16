@@ -2,22 +2,20 @@ import React, { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ setIsLoggedIn,setUser}) => {
+const Login = ({ loggedInUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await api.post('/api/auth/login', { username, password });
-      const token=response.data.token;
-      console.log(token);
-      sessionStorage.setItem('token',token)
-      setIsLoggedIn(true);
-      setUser({username})
-      navigate('/');
+      const token = response.data.token;
+      sessionStorage.setItem('token', token);
+      loggedInUser(true); 
+      navigate('/'); 
     } catch (error) {
       setError('Invalid credentials');
     }
@@ -27,22 +25,29 @@ const Login = ({ setIsLoggedIn,setUser}) => {
     <div>
       <form onSubmit={handleLogin}>
         <h2>Login</h2>
+        
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+        
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        
         <button type="submit">Login</button>
-        {error && <p>{error}</p>}
+
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
-      <p>It's Look like you don't have Register Yet. Please <a href="/register">Register</a></p>
+      <p>
+        Looks like you don't have an account yet. Please{' '}
+        <a href="/register">Register</a>
+      </p>
     </div>
   );
 };

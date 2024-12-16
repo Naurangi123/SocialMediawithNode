@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 
 exports.createPost = async (req, res) => {
   const { title, content } = req.body;
-  const user = await User.findById(req.user); 
+  const userId = req.user.id; 
+  const user = await User.findById(userId).select('-password');
   if (!user) {
     return res.status(401).json({ message: "User not found" });
   }

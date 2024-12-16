@@ -7,18 +7,20 @@ const CreatePost = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
   const [error, setError] = useState(null);
-  const [user, setUser] = useState(null); 
-  const token = localStorage.getItem('token'); 
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null); 
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) {
-      setError('You need to log in to create a post.');
-      return;
-    }
+    const fetchUserProfile = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        setError('No authentication token found');
+        return;
+      }
+      setToken(token); 
 
-    const fetchUser = async () => {
       try {
         const response = await api.get('/api/auth/user', {
           headers: {
@@ -26,14 +28,13 @@ const CreatePost = () => {
           },
         });
         setUser(response.data);
-        console.log(response.data);
       } catch (err) {
-        setError('Failed to fetch user profile.');
+        setError(err.response?.data?.message || 'Something went wrong');
       }
     };
 
-    fetchUser();
-  }, [token]);
+    fetchUserProfile();
+  }, []); 
 
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleContentChange = (e) => setContent(e.target.value);
@@ -55,33 +56,27 @@ const CreatePost = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('user', user.id); 
+    formData.append('user', user.id);
 
     if (image) {
       formData.append('image', image);
     }
 
     try {
-      const response = await api.post('/api/posts/create',formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${token}`, 
-          },
-        }
-      );
-      console.log('Post created successfully:', response.data); 
+      const response = await api.post('/api/posts/create', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+      console.log('Post created successfully:', response.data);
       setTitle('');
       setContent('');
       setImage(null);
       setError(null);
       navigate('/'); 
     } catch (err) {
-      if (err.response) {
-        setError(err.response.data.message || 'Something went wrong.');
-      } else {
-        setError('Server error. Please try again later.');
-      }
+      setError(err.response?.data.message || 'Something went wrong.');
       console.error('Error creating post:', err);
     }
   };
@@ -93,7 +88,6 @@ const CreatePost = () => {
   return (
     <>
       <h2>Create a New Post</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
         <input

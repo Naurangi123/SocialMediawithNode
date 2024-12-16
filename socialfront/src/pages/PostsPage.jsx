@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +12,6 @@ const PostPage = () => {
   const fetchPosts = async () => {
     try {
       const response = await api.get('/api/posts');
-      console.log(response.data);
       setPosts(response.data);
       setLoading(false);
     } catch (err) {
@@ -41,13 +41,14 @@ const PostPage = () => {
           <div className="post_header">
             <img src={`http://localhost:8000/uploads/${post.user.photo}`} alt={post.user.username} className="user-avatar" />
             <span className="username">{post.user.username}</span>
-            <span className="timestamp">{post.createdAt.toLocaleString()}</span>
+            <span className="timestamp">{moment(post.createdAt).format('MM/DD/YYYY, hh:mm A')}</span>
           </div>
           <div className="post_image">
             <img src={`http://localhost:8000/uploads/${post.image}`} alt={post.user.username}/>
           </div>
           <div className="post-content">
             <p className="username">{post.content}</p>
+            <p>{post.likeCount}</p>
           </div>
         </div>
       ))}

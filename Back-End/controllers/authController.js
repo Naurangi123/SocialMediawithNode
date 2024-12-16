@@ -119,10 +119,15 @@ exports.login = async (req, res) => {
 //   next();
 // }
 exports.userProfile=async(req,res)=>{
-  const user=await User.findOne(req.user);
-  res.json({
-    status:'success',
-    user:user
-  });
-  
+  try {
+    const userId = req.user.id; 
+    const user = await User.findById(userId).select('-password'); 
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 }

@@ -1,80 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './AuthPage/Login';
 import Register from './AuthPage/Register';
-import ProtectedRoute from './AuthPage/ProtectedRoute';
 import PostsPage from './pages/PostsPage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CreatePost from './pages/CreatePost';
 import PostDetailPage from './pages/PostDetailPage';
 import UserProfile from './pages/UserProfile';
-
-function LogOut() {
-  sessionStorage.removeItem('token'); 
-  window.location.href = '/login';  
-}
+import LogOut from './components/LogOut';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token) {
-      setIsLoggedIn(true);
+      setIsAuthenticated(true);
     }
   }, []);
 
+  const loggedInUser = (status) => {
+    setIsAuthenticated(status);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('token');
+    setIsAuthenticated(false);
+  };
+
   return (
-    <>
-      <Router>
-        <Navbar user={user} />
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
-          <Route path="/register" element={<Register />} />
+    <Router>
+      <Navbar isAuthenticated={isAuthenticated} handleLogout={handleLogout} />
+      <Routes>
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login loggedInUser={loggedInUser} />} />
+        <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <Register />} />
 
-          {/* Protected routes */}
-          <Route
-            path="/createpost"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <CreatePost />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <PostsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/post/:id"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <PostDetailPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <UserProfile />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* LogOut route */}
-          <Route path="/logout" element={<LogOut />} />
-        </Routes>
-      </Router>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <PostsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/createpost"
+          element={
+            <ProtectedRoute>
+              <CreatePost loggedInUser={loggedInUser} />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/post/:id" element={<PostDetailPage />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <UserProfile loggedInUser={loggedInUser} />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/logout" element={<LogOut loggedInUser={loggedInUser} />} />
+      </Routes>
       <Footer />
-    </>
+    </Router>
   );
 };
 

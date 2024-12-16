@@ -1,55 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 
-const UserProfile = () => {
-  const [user, setUser] = useState(null);
+const Profile = () => {
+  const [user, setUser] = useState({});
   const [error, setError] = useState(null);
 
-  const fetchUserProfile = async () => {
+  const UserProfile = async () => {
     try {
-      const token = localStorage.getItem('token');
-
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        setError("No authentication token found");
+        return;
+      }
       const response = await api.get('/api/auth/user', {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
-      setUser(response.data); 
-      console.log(response.data); 
+      setUser(response.data);
     } catch (err) {
-      setError(err.response?.data?.message);
+      setError(err.response?.data?.message || "Something went wrong");
     }
   };
 
   useEffect(() => {
-    fetchUserProfile();
+    UserProfile();
   }, []);
 
-  useEffect(() => {
-    console.log('User state updated:', user);
-  }, [user]);
+  if (Object.keys(user).length === 0) {
+    return <div>Loading...</div>;
+  }
+  
+
 
   if (error) {
     return <div style={{ color: 'red' }}>Error: {error}</div>;
   }
 
   if (!user) {
-    return <div>Loading...</div>;  
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="profile">
-    <h2>User Profile</h2>
-    {user.profilePic ? (
-      <img src={`${api}/uploads/${user.profilePic}`} alt={user.username} />
-    ) : (
-      <img src="/default-avatar.png" alt="Default Avatar" />
-    )}
-    <h2>Name: {user.username}</h2>
-    <h4>Email: {user.email}</h4>
-    <h4>Bio: {user.bio || 'No bio available'}</h4>
-  </div>
+      <h2>User Profile</h2>
+      <img src={`http://localhost:8000/uploads/${user.photo}`} alt={user.username} width="150" />
+      <h3>Name: {user.username}</h3>
+      <h4>Email: {user.email}</h4>
+      <h4>Bio: {user.bio || 'No bio available'}</h4>
+    </div>
   );
 };
 
-export default UserProfile;
+export default Profile;
