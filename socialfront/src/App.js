@@ -10,6 +10,7 @@ import PostDetailPage from './pages/PostDetailPage';
 import UserProfile from './pages/UserProfile';
 import LogOut from './components/LogOut';
 import ProtectedRoute from './components/ProtectedRoute';
+import Message from './pages/Message';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,25 +38,29 @@ const App = () => {
         <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login loggedInUser={loggedInUser} />} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <Register />} />
 
-        <Route
-          path="/"
+        <Route path="/"
           element={
             <ProtectedRoute>
               <PostsPage />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/createpost"
+        <Route path="/createpost"
           element={
             <ProtectedRoute>
               <CreatePost loggedInUser={loggedInUser} />
             </ProtectedRoute>
           }
         />
+        <Route path="/message"
+          element={
+            <ProtectedRoute>
+              <Message loggedInUser={loggedInUser} />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/post/:id" element={<PostDetailPage />} />
-        <Route
-          path="/profile"
+        <Route path="/profile"
           element={
             <ProtectedRoute>
               <UserProfile loggedInUser={loggedInUser} />

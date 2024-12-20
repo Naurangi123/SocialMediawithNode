@@ -1,10 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const http = require('http');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const path=require('path')
 require('dotenv').config();
@@ -48,37 +46,6 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.log(err));
 
-// Create HTTP server and setup Socket.IO
-const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: '*', // Adjust as needed
-    methods: ['GET', 'POST']
-  }
-});
-
-// Socket.IO events
-io.on('connection', (socket) => {
-  console.log('New client connected');
-
-  // Join room for messaging between two users
-  socket.on('joinRoom', ({ senderId, receiverId }) => {
-    const room = [senderId, receiverId].sort().join('_');
-    socket.join(room);
-    // console.log(`User joined room: ${room}`);
-  });
-
-  // Handle sending messages
-  socket.on('sendMessage', ({ senderId, receiverId, content }) => {
-    const room = [senderId, receiverId].sort().join('_');
-    io.to(room).emit('receiveMessage', { senderId, content, createdAt: new Date() });
-  });
-
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-});
-
 // Start Server
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));

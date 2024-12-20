@@ -124,11 +124,12 @@
     margin-top: 40px;
     display: inline-block;
     padding: 20px;
-    margin-left: 500px;
+    margin-left: 300px;
     overflow: hidden;
+    width: 50%;
     height: 200px;
     overflow-y: scroll;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 10px rgb(71, 61, 61);
     scrollbar-width: none;
 }
 
@@ -138,6 +139,8 @@
     border-radius: 8px;
     margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(9, 9, 9, 0.05);
+    display: flex;
+    gap: 20px;
 }
 
 .comment-item p {

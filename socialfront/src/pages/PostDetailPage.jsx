@@ -47,7 +47,7 @@ const PostDetailPage = () => {
       try {
         const response = await api.get(`/api/posts/${id}/`);
         setPost(response.data);
-        setLike(response.data.likeCount);  // Set initial like count
+        setLike(response.data.likeCount);  
         setDislike(response.data.dislikeCount);
         setLoading(false);
       } catch (error) {
@@ -62,17 +62,18 @@ const PostDetailPage = () => {
   useEffect(() => {
     const fetchPComment = async () => {
       try {
-        const response = await api.get('/api/comments/');
+        const response = await api.get(`/api/comments/${id}/`);
         setComments(response.data);
+        console.log(response.data);
+        
         setLoading(false);
       } catch (error) {
         console.error('Error fetching comments:', error);
         setLoading(false);
       }
     };
-
     fetchPComment();
-  }, []);
+  }, [id]);
 
   const handleLikeToggle = async () => {
     setDislike(like+1)
@@ -111,7 +112,7 @@ const PostDetailPage = () => {
     const newCommentObj = {
       content: newComment,
       postId: id,
-      userId: user._id,
+      user: user._id,
     };
     setComments([newCommentObj, ...comments]);
     setNewComment(''); 
@@ -182,7 +183,8 @@ const PostDetailPage = () => {
           <div className="modal-content">
             <span className="close-modal" onClick={closeCommentModal}>&times;</span>
             <form onSubmit={handleCommentSubmit} className="comment-form">
-              <textarea
+              <input
+                type='text'
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Add a comment..."
@@ -195,16 +197,16 @@ const PostDetailPage = () => {
         </div>
       )}
       </div>
-      <div className="comments-section">
+      {comments?<div className="comments-section">
         {comments.map((comment) => (
           <div key={comment._id} className="comment-item">
-            <p><img src={`http://localhost:8000/uploads/${post.user.photo}`} alt={post.user.username} className="user-avatar" /> | {comment.user.username} | {comment.content}</p>
-            <span className="timestamp">{moment(comment.createdAt).format('MM/DD/YYYY, hh:mm A')}</span>
+            <img src={`http://localhost:8000/uploads/${user.photo}`} alt={user?.username} className="user-avatar" /> 
+            <p>{comment.user?.username} | {comment.content}</p>
+            <span className="timestamp">{moment(comment.createdAt).format('MM/DD/YYYY, hh:mm')}</span>
           </div>
         ))}
-      </div>
+      </div>:<div>No Comment Found</div>}
     </>
   );
 };
-
 export default PostDetailPage;

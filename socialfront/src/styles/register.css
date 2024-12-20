@@ -98,3 +98,22 @@ input[type="file"]:hover {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
+
+@media (max-width: 768px) {
+  .register,.login,.create_post {
+      padding: 15px;
+  }
+
+  .register,.login,.create_post {
+      margin-bottom: 20px;
+  }
+
+  .register,.login,.create_post {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .register,.login,.create_post {
+      margin-top: 5px;
+  }
+}

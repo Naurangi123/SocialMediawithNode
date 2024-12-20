@@ -4,6 +4,6 @@ const { addComment ,getComments } = require('../controllers/commentController');
 const {protect} = require('../middleware/authMiddleware');
 
 router.post('/:postId', protect, addComment);
-router.get('/',getComments);
+router.get('/:postId',getComments);
 
 module.exports = router;

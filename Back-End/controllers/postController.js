@@ -48,9 +48,6 @@ exports.getPosts = async (req, res) => {
     res.status(500).json({ message: 'Server error', err: err.message });
   }
 };
-
-
-
 exports.getPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params._id)
@@ -61,7 +58,6 @@ exports.getPost = async (req, res) => {
     return res.json(post);
   } catch (error) {
     return res.status(500).json({ message: 'Server error', err: error.message });
-    
   }
 }
 
@@ -91,12 +87,9 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-
-
 exports.likePost= async (req, res) => {
   const postId = req.params._id;
   const user = req.user; 
-
   try {
     if (!user || !user._id) {
       return res.status(400).json({ message: 'Invalid user' });
@@ -134,7 +127,6 @@ exports.likePost= async (req, res) => {
 exports.dislikePost= async (req, res) => {
   const postId = req.params._id;
   const user = req.user; 
-
   try {
     if (!user || !user._id) {
       return res.status(400).json({ message: 'Invalid user' });
@@ -166,5 +158,4 @@ exports.dislikePost= async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
-
 };
