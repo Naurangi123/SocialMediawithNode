@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const PostPage = () => {
   const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate=useNavigate()
@@ -22,6 +23,22 @@ const PostPage = () => {
     fetchPosts();
   }, []);
 
+  useEffect(() => {
+    const fetchPComment = async () => {
+      try {
+        const response = await api.get('/api/comments/');
+        setComments(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchPComment();
+  }, []);
+
+
   const handlePostClick = (id) => {
     navigate(`/post/${id}`);
   };
@@ -35,24 +52,42 @@ const PostPage = () => {
   }
 
   return (
-    <div className="post-container">
-      {posts.map((post) => (
-        <div key={post._id} className="post" onClick={() => handlePostClick(post._id)}>
-          <div className="post_header">
-            <img src={`http://localhost:8000/uploads/${post.user.photo}`} alt={post.user.username} className="user-avatar" />
-            <span className="username">{post.user.username}</span>
-            <span className="timestamp">{moment(post.createdAt).format('MM/DD/YYYY, hh:mm A')}</span>
-          </div>
-          <div className="post_image">
-            <img src={`http://localhost:8000/uploads/${post.image}`} alt={post.user.username}/>
-          </div>
-          <div className="post-content">
-            <p className="username">{post.content}</p>
-            <p>{post.likeCount}</p>
-          </div>
+    <>
+      <div className="posts-container">
+  {posts.map((post) => (
+    <div key={post._id} className="post-card" onClick={() => handlePostClick(post._id)}>
+      <div className="post-header">
+        <img
+          src={`http://localhost:8000/uploads/${post.user.photo}`}
+          alt={post.user.username}
+          className="user-avatar"
+        />
+        <div className="post-info">
+          <span className="username">{post.user.username}</span>
+          <span className="timestamp">{moment(post.createdAt).format('MM/DD/YYYY, hh:mm A')}</span>
         </div>
-      ))}
+      </div>
+      <div className="post-image">
+        <img src={`http://localhost:8000/uploads/${post.image}`} alt={post.user.username} />
+      </div>
+      <div className="post-content">
+        <p>{post.content}</p>
+      </div>
+      <div className="social-actions">
+        <div className="like">
+          <span className="fa fa-thumbs-up"></span>
+          <span>{post.likeCount}</span>
+        </div>
+        <div className="comment">
+          <span className="fa fa-comment"></span>
+          <span>{comments.length}</span>
+        </div>
+      </div>
     </div>
+  ))}
+</div>
+
+    </>
   );
 };
 

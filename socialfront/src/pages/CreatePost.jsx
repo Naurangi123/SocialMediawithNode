@@ -87,9 +87,9 @@ const CreatePost = () => {
 
   return (
     <>
-      <h2>Create a New Post</h2>
+    <div className="create_post">
+    <h2>Create Post</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title:</label>
         <input
           type="text"
           id="title"
@@ -98,26 +98,22 @@ const CreatePost = () => {
           required
           placeholder="Enter post title"
         />
-
-        <label htmlFor="content">Content:</label>
-        <textarea
+        <textarea style={{width:'280px', height:'50px'}}
           id="content"
           value={content}
           onChange={handleContentChange}
           required
           placeholder="Write your content here"
         />
-
-        <label htmlFor="image">Image:</label>
         <input
           type="file"
           id="image"
           accept="image/*"
           onChange={handleImageChange}
         />
-
         <button type="submit">Create Post</button>
       </form>
+    </div>
     </>
   );
 };

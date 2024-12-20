@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import '../styles/profile.css'
 
 const Profile = () => {
   const [user, setUser] = useState({});
@@ -42,12 +43,16 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile">
-      <h2>User Profile</h2>
-      <img src={`http://localhost:8000/uploads/${user.photo}`} alt={user.username} width="150" />
-      <h3>Name: {user.username}</h3>
-      <h4>Email: {user.email}</h4>
-      <h4>Bio: {user.bio || 'No bio available'}</h4>
+    <div className="profile" style={{ backgroundImage: `url(http://localhost:8000/uploads/${user.photo})`}}>
+      <h2>Profile</h2>
+      <div className="profile-header">
+        <img src={`http://localhost:8000/uploads/${user.photo}`} alt={user.username} className="profile-img" />
+        <div className="profile-info">
+          <h3 className="profile-username">{user.username}</h3>
+          <h4 className="profile-email">{user.email}</h4>
+          <p className="profile-bio">{user.bio || 'No bio available'}</p>
+        </div>
+      </div>
     </div>
   );
 };

@@ -6,10 +6,15 @@ import '../styles/post.css';
 
 const PostDetailPage = () => {
   const [post, setPost] = useState(null);
+  const [comments, setComments] = useState(null);
+  const [newComment, setNewComment] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [like, setLike] = useState(0);
+  const [dislike, setDislike] = useState(0);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const { id } = useParams(); 
   const navigate = useNavigate();
 
@@ -42,6 +47,8 @@ const PostDetailPage = () => {
       try {
         const response = await api.get(`/api/posts/${id}/`);
         setPost(response.data);
+        setLike(response.data.likeCount);  // Set initial like count
+        setDislike(response.data.dislikeCount);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -52,46 +59,92 @@ const PostDetailPage = () => {
     fetchPost();
   }, [id]);
 
+  useEffect(() => {
+    const fetchPComment = async () => {
+      try {
+        const response = await api.get('/api/comments/');
+        setComments(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchPComment();
+  }, []);
+
   const handleLikeToggle = async () => {
+    setDislike(like+1)
     try {
       const response = await api.post(`/api/posts/${id}/likes`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setPost((prevPost) => ({
-        ...prevPost,
-        likes: response.data.likes,
-        likeCount: response.data.likeCount,
-      }));
+      setLike(response.data.likeCount);
     } catch (error) {
       console.error('Error liking post:', error);
+      setLike(like-1);
     }
   };
 
   const handleDislikeToggle = async () => {
+    setDislike(dislike+1)
     try {
-      const response = await api.post(`/api/posts/${id}/dislikes`, { userId: post.user._id }, {
+      const response = await api.post(`/api/posts/${id}/dislikes`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setPost((prevPost) => ({
-        ...prevPost,
-        dislikes: response.data.dislikes,
-        dislikeCount: response.data.dislikeCount,
-      }));
+      setDislike(response.data.dislikeCount);
     } catch (error) {
       console.error('Error disliking post:', error);
+      setDislike(dislike-1);
     }
   };
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!newComment.trim()) return;
+    const newCommentObj = {
+      content: newComment,
+      postId: id,
+      userId: user._id,
+    };
+    setComments([newCommentObj, ...comments]);
+    setNewComment(''); 
+    setIsModalOpen(false);
+
+    try {
+      const response = await api.post(`/api/comments/${id}`, newCommentObj, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setComments([response.data, ...comments]);
+    } catch (error) {
+      console.error('Error posting comment:', error);
+    }
+  };
+
+  const openCommentModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeCommentModal = () => {
+    setIsModalOpen(false);
+  };
+
+  if(!user) return <div>User Not Found</div>;
 
   if (loading) return <div>Loading post...</div>;
 
   if (!post) return <div>Post not found</div>;
-
-  const isLiked = post.user._id;  
-  const isDisliked = post.user._id; 
+  
+  if (error) return <div>{error}</div>;
+  
 
   return (
     <>
@@ -110,20 +163,45 @@ const PostDetailPage = () => {
         <div className="post-content">
           <p className="username">{post.content}</p>
         </div>
-        <div className="likes-dislikes">
-          <button
-            onClick={handleLikeToggle}
-            className={`like-btn ${isLiked ? 'liked' : ''} fa fa-thumbs-up`}
-          >
-          </button>
-          {post.likeCount}
-          <button
-            onClick={handleDislikeToggle}
-            className={`dislike-btn ${isDisliked ? 'disliked' : ''} fa fa-thumbs-down`}
-          >
-          </button>
-          {post.dislikeCount}
+        <div className="social_actions">
+          <div className="like">
+            <span><button onClick={handleLikeToggle} className="fa fa-thumbs-up"></button></span>
+            {like}
+          </div>
+          <div className="dislike">
+            <span><button onClick={handleDislikeToggle} className="fa fa-thumbs-down"></button></span>
+            {dislike}
+          </div>
+          <div className="comment">
+            <span><button  className="fa fa-comment" onClick={openCommentModal}></button></span>
+            {comments?<p>{comments.length}</p>:<p>No Comment Found</p>}
+          </div>
         </div>
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close-modal" onClick={closeCommentModal}>&times;</span>
+            <form onSubmit={handleCommentSubmit} className="comment-form">
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
+                className="comment-input"
+                required
+              />
+              <button type="submit" className="submit-comment-btn">Submit</button>
+            </form>
+          </div>
+        </div>
+      )}
+      </div>
+      <div className="comments-section">
+        {comments.map((comment) => (
+          <div key={comment._id} className="comment-item">
+            <p><img src={`http://localhost:8000/uploads/${post.user.photo}`} alt={post.user.username} className="user-avatar" /> | {comment.user.username} | {comment.content}</p>
+            <span className="timestamp">{moment(comment.createdAt).format('MM/DD/YYYY, hh:mm A')}</span>
+          </div>
+        ))}
       </div>
     </>
   );

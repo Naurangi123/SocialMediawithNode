@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import '../styles/register.css'
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -35,7 +36,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className='register'>
       <form onSubmit={handleRegister}>
         <h2>Register</h2>
         <input
@@ -77,6 +78,7 @@ const Register = () => {
         {error && <p>{error}</p>}
       </form>
     </div>
+
   );
 };
 
