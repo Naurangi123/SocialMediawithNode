@@ -156,7 +156,7 @@ const PostDetailPage = () => {
         <div className="post_header">
           <img src={`http://localhost:8000/uploads/${post.user.photo}`} alt={post.user.username} className="user-avatar" />
           <span className="username">{post.user.username}</span>
-          <span className="timestamp">{moment(post.createdAt).format('MM/DD/YYYY, hh:mm A')}</span>
+          <span className="timestamp">{moment(post.createdAt).fromNow()}</span>
         </div>
         <div className="post_image">
           <img src={`http://localhost:8000/uploads/${post.image}`} alt={post.user.username} />
@@ -202,7 +202,7 @@ const PostDetailPage = () => {
           <div key={comment._id} className="comment-item">
             <img src={`http://localhost:8000/uploads/${user.photo}`} alt={user?.username} className="user-avatar" /> 
             <p>{comment.user?.username} | {comment.content}</p>
-            <span className="timestamp">{moment(comment.createdAt).format('MM/DD/YYYY, hh:mm')}</span>
+            <span className="timestamp">{moment(comment.createdAt).fromNow()}</span>
           </div>
         ))}
       </div>:<div>No Comment Found</div>}

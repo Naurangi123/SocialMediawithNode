@@ -52,7 +52,7 @@ const PostPage = () => {
               />
               <div className="post-info">
                 <span className="username">{post.user.username}</span>
-                <span className="timestamp">{moment(post.createdAt).format('MM/DD/YYYY, hh:mm A')}</span>
+                <span className="timestamp">{moment(post.createdAt).fromNow()}</span>
               </div>
             </div>
             <div className="post-image">

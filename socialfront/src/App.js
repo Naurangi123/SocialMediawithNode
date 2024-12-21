@@ -10,7 +10,6 @@ import PostDetailPage from './pages/PostDetailPage';
 import UserProfile from './pages/UserProfile';
 import LogOut from './components/LogOut';
 import ProtectedRoute from './components/ProtectedRoute';
-// import Message from './pages/Message';
 import ThreadList from './Chat/ThreadList';
 import ChatRoom from './Chat/ChatRoom';
 const App = () => {

@@ -10,7 +10,7 @@ export default function MessageInput({ threadId }) {
     e.preventDefault();
     if (content.trim()) {
       try {
-        const { message } = await sendMessage(threadId, content);
+        const message  = await sendMessage(threadId, content);
         setContent('');
       } catch (error) {
         console.error('Error sending message:', error);
