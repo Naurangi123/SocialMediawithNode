@@ -10,8 +10,9 @@ import PostDetailPage from './pages/PostDetailPage';
 import UserProfile from './pages/UserProfile';
 import LogOut from './components/LogOut';
 import ProtectedRoute from './components/ProtectedRoute';
-import Message from './pages/Message';
-
+// import Message from './pages/Message';
+import ThreadList from './Chat/ThreadList';
+import ChatRoom from './Chat/ChatRoom';
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -52,13 +53,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/message"
-          element={
-            <ProtectedRoute>
-              <Message loggedInUser={loggedInUser} />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/msg" element={<ThreadList />} />
+        <Route path="/thread/:threadId" element={<ChatRoom />} />
+
         <Route path="/post/:id" element={<PostDetailPage />} />
         <Route path="/profile"
           element={

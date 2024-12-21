@@ -11,7 +11,8 @@ const Navbar = ({ isAuthenticated, handleLogout }) => {
           <>
             <li><Link to="/createpost">Create Post</Link></li>
             <li><Link to="/profile">Profile</Link></li>
-            <li><Link to="/message">Message</Link></li>
+            <li><Link to="/msg">Message</Link></li>
+            <li><Link to="/thread/:threadId">Thread</Link></li>
             <li>
               <button onClick={handleLogout}>Logout</button>
             </li>

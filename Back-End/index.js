@@ -29,14 +29,15 @@ app.use(cors());
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
-const messageRoutes = require('./routes/messageRoutes');
 const commentRoutes = require('./routes/commentRoutes');
+const threadRoutes = require('./routes/threadRoutes')
 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
-app.use('/api/messages', messageRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/threads', threadRoutes);
+
 
 
 mongoose.connect(process.env.MONGO_URI, {
