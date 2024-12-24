@@ -153,7 +153,7 @@ const PostDetailPage = () => {
         <button onClick={() => navigate(-1)} className="back-btn">Back to Posts</button>
       </div>
       <div className="post-detail-container">
-        <div className="post_header">
+        <div className="post_header" onClick={()=>navigate('/profile')}>
           <img src={`http://localhost:8000/uploads/${post.user.photo}`} alt={post.user.username} className="user-avatar" />
           <span className="username">{post.user.username}</span>
           <span className="timestamp">{moment(post.createdAt).fromNow()}</span>

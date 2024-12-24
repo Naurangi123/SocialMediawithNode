@@ -52,8 +52,19 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/msg" element={<ThreadList />} />
-        <Route path="/thread/:threadId" element={<ChatRoom />} />
+        <Route path="/msg" 
+        element={
+          <ProtectedRoute>
+            <ThreadList />
+          </ProtectedRoute>
+          } />
+        <Route path="/thread/:threadId"
+          element={
+            <ProtectedRoute>
+              <ChatRoom />
+            </ProtectedRoute>
+            } 
+         />
 
         <Route path="/post/:id" element={<PostDetailPage />} />
         <Route path="/profile"

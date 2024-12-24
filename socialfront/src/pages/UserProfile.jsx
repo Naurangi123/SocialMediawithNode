@@ -43,7 +43,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile" style={{ backgroundImage: `url(http://localhost:8000/uploads/${user.photo})`}}>
+    <div className="profile">
       <h2>Profile</h2>
       <div className="profile-header">
         <img src={`http://localhost:8000/uploads/${user.photo}`} alt={user.username} className="profile-img" />
