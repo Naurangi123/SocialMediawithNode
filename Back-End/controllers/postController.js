@@ -1,7 +1,6 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
 const Comment = require('../models/Comment');
-const mongoose = require('mongoose');
 
 exports.createPost = async (req, res) => {
   const { title, content } = req.body;

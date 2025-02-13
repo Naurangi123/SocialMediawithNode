@@ -13,6 +13,7 @@ const PostPage = () => {
     try {
       const response = await api.get('/api/posts');
       setPosts(response.data);
+      console.log(response.data);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching posts:", err);
