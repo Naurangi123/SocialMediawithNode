@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Social App Creation",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js"
+  "scripts":  {
+    "start": "node index.js", 
+    "dev": "nodemon server.js", 
+    "build": "echo 'No build step for back-end'"
   },
   "author": "naurangi",
   "license": "ISC",
