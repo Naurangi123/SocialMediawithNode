@@ -93,7 +93,7 @@ app.use(cookieParser());
 app.use(cors());
 
 // Static file serving
-const buildPath = path.join(__dirname, '..', 'socialfront', 'build'); // Updated path
+const buildPath = path.join(__dirname, '..', 'build'); // Updated path
 app.use(express.static(buildPath));
 console.log('Building social front from', buildPath);
 
@@ -113,7 +113,7 @@ app.use('/api/threads', threadRoutes);
 
 // Serve React app for all other requests
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'socialfront', 'build', 'index.html')); // Updated path
+  res.sendFile(path.join(__dirname, '..', 'build', 'index.html')); // Updated path
 });
 
 // MongoDB connection
