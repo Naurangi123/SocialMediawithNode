@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Navigate,useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import api from '../services/api';
 import '../styles/post.css';
@@ -24,7 +24,7 @@ const PostDetailPage = () => {
       const storedToken = sessionStorage.getItem('token');
       if (!storedToken) {
         setError('No authentication token found');
-        navigate('/login')
+        Navigate('/login')
         return;
       }
       setToken(storedToken);

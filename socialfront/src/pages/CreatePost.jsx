@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import '../styles/register.css';
 
@@ -19,7 +19,7 @@ const CreatePost = () => {
     const fetchUserProfile = async () => {
       const token = sessionStorage.getItem('token');
       if (!token) {
-        navigate('/login')
+        Navigate('/login');
         return;
       }
       setToken(token); 

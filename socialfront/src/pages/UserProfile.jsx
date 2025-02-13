@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import api from '../services/api';
 import '../styles/profile.css'
 
@@ -7,13 +7,12 @@ const Profile = () => {
   const [user, setUser] = useState({});
   const [error, setError] = useState(null);
 
-  const navigate=useNavigate()
 
   const UserProfile = async () => {
     try {
       const token = sessionStorage.getItem('token');
       if (!token) {
-        navigate('/login');
+        Navigate('/login');
         return;
       }
       const response = await api.get('/api/auth/user', {
