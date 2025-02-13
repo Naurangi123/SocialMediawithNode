@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const buildPath = path.join(__dirname, '..', 'build');
+const buildPath = path.join('..', 'build');
 
 app.use(express.static(buildPath));
 
