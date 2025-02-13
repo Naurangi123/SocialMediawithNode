@@ -22,7 +22,8 @@ app.use(session({
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-const buildPath = path.join(__dirname, '..', 'socialfront', 'build');
+const buildPath = path.join(__dirname, '..','build');
+console.log(buildPath);
 app.use(express.static(buildPath));
 app.use('/uploads',express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser()); 
