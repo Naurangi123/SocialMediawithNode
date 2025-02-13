@@ -26,8 +26,7 @@ const PostPage = () => {
   }, []);
 
   const handlePostClick = (id) => {
-    const postId = parseInt(id, 10);
-    navigate(`/post/${postId}`);
+    navigate(`/post/${id}`);
   };
 
   if (loading) {
