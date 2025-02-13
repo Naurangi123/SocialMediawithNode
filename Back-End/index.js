@@ -1,10 +1,77 @@
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const cors = require('cors');
+// const session = require('express-session');
+// const cookieParser = require('cookie-parser');
+// const bodyParser = require('body-parser');
+// const path=require('path')
+// require('dotenv').config();
+
+// // Initialize Express
+// const app = express();
+
+// // Session middleware
+// app.use(session({
+//   secret: process.env.SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: false }
+// }));
+
+// // Middleware
+// app.use(express.json()); 
+// app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// const buildPath = path.join(__dirname, '..', 'socialfront', 'build');
+
+// app.use(express.static(buildPath));
+
+// console.log('Building social front', buildPath)
+
+// app.use('/uploads',express.static(path.join(__dirname, "uploads")));
+
+// app.use(cookieParser()); 
+// app.use(cors());
+
+// // Routes
+// const authRoutes = require('./routes/authRoutes');
+// const postRoutes = require('./routes/postRoutes');
+// const commentRoutes = require('./routes/commentRoutes');
+// const threadRoutes = require('./routes/threadRoutes')
+
+
+// app.use('/api/auth', authRoutes);
+// app.use('/api/posts', postRoutes);
+// app.use('/api/comments', commentRoutes);
+// app.use('/api/threads', threadRoutes);
+
+
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname,'..', 'build', 'index.html'));
+// });
+
+// mongoose.connect(process.env.MONGO_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   serverSelectionTimeoutMS: 30000,
+//   socketTimeoutMS: 45000,
+// })
+// .then(() => console.log('MongoDB Connected'))
+// .catch(err => console.log(err));
+
+
+
+// // Start Server
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const path=require('path')
+const path = require('path');
 require('dotenv').config();
 
 // Initialize Express
@@ -15,58 +82,49 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: process.env.NODE_ENV === 'production' }
+  cookie: { secure: false }
 }));
-const buildPath = path.join(__dirname,'..', 'build');
+
 // Middleware
-app.use(express.json()); 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors());
+
+// Static file serving
+const buildPath = path.join(__dirname, '..', 'socialfront', 'build'); // Updated path
 app.use(express.static(buildPath));
-app.use('/uploads',express.static(path.join(__dirname, "uploads")));
-app.use(cookieParser()); 
+console.log('Building social front from', buildPath);
 
-console.log(buildPath)
-
-const corsOptions = {
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true, 
-};
-
-app.use(cors(corsOptions));
+// Serving static files (uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const commentRoutes = require('./routes/commentRoutes');
-const threadRoutes = require('./routes/threadRoutes')
-
+const threadRoutes = require('./routes/threadRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/threads', threadRoutes);
 
-
+// Serve React app for all other requests
 app.get('*', (req, res) => {
-  res.sendFile(path.join(buildPath,'index.html')); 
+  res.sendFile(path.join(__dirname, '..', 'socialfront', 'build', 'index.html')); // Updated path
 });
 
+// MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverSelectionTimeoutMS: 30000,
   socketTimeoutMS: 45000,
 })
-.then(() => console.log('MongoDB Connected'))
-.catch(err => console.log(err));
-
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);  // Log the error
-  res.status(500).send('Something went wrong!');
-});
-
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
 
 // Start Server
 const PORT = process.env.PORT || 5000;
