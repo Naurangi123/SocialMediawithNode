@@ -13,11 +13,13 @@ const signToken=(id)=>{
 
 
 
+
+
 exports.signUp = async (req, res) => {
   const { username, email, password, confirmPassword, bio} = req.body;
 
   try {
-    const userExists = await User.findOne({ username });
+    const userExists = await User.findOne({ username:username });
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
@@ -78,7 +80,7 @@ exports.login = async (req, res) => {
       token,
     });
   } catch (err) {
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: err.message });
   }
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api'
 import moment from 'moment';
-import '../styles/register.css'
+// import '../styles/register.css'
 import { useNavigate } from 'react-router-dom';
 
 export default function ThreadList() {

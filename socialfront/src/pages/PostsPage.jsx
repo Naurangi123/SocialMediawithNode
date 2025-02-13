@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import '../style/post.css';
+// import '../style/base.css'
 
 /* eslint-disable no-unused-vars */
 

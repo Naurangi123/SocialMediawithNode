@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
-import '../styles/register.css'
+import '../style/register.css'
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -74,7 +74,7 @@ const Register = () => {
           placeholder="Select File"
           onChange={(e) => setPhoto(e.target.files[0])}
         />
-        <button type="submit">Register</button>
+        <button className='register_btn' type="submit">Register</button>
         {error && <p>{error}</p>}
       </form>
     </div>

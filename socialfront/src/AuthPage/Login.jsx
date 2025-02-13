@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import '../style/register.css';
 
 const Login = ({ loggedInUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);  // Start loading
+    setError(null);    // Clear previous errors
+
     try {
       const response = await api.post('/api/auth/login', { username, password });
-      const token = response.data.token;
+      const { token } = response.data;
       sessionStorage.setItem('token', token);
-      loggedInUser(true); 
-      navigate('/'); 
+      loggedInUser(true);  // Update the logged-in status
+      navigate('/');  // Navigate to home
     } catch (error) {
-      setError('Invalid credentials');
+      setError(`Login failed: ${error.message}`);  // Set error message
+    } finally {
+      setLoading(false);  // Stop loading
     }
   };
 
@@ -40,7 +47,9 @@ const Login = ({ loggedInUser }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
         
-        <button type="submit">Login</button>
+        <button disabled={loading} className='login_btn' type="submit">
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
