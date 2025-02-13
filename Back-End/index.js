@@ -49,7 +49,7 @@ app.use('/api/threads', threadRoutes);
 
 
 app.get('*', (req, res) => {
-  res.sendFile(buildPath,'index.html'); 
+  res.sendFile(path.join(buildPath,'index.html')); 
 });
 
 mongoose.connect(process.env.MONGO_URI, {
