@@ -4,8 +4,7 @@
   "description": "Social App Creation",
   "main": "index.js",
   "scripts":  {
-    "start": "node index.js", 
-    "dev": "nodemon index.js", 
+    "start": "nodemon index.js", 
     "build": "echo 'No build step for back-end'"
   },
   "author": "naurangi",

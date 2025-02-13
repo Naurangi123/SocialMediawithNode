@@ -17,14 +17,16 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
-
+const buildPath = path.join(__dirname,'..', 'build');
 // Middleware
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname,'..', 'build')));
+app.use(express.static(buildPath));
 app.use('/uploads',express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser()); 
+
+console.log(buildPath)
 
 const corsOptions = {
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
@@ -47,7 +49,7 @@ app.use('/api/threads', threadRoutes);
 
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html')); 
+  res.sendFile(buildPath,'index.html'); 
 });
 
 mongoose.connect(process.env.MONGO_URI, {
