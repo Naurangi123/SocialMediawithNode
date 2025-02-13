@@ -15,7 +15,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
 
 // Middleware
@@ -25,7 +25,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'build')));
 app.use('/uploads',express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser()); 
-app.use(cors());
+
+const corsOptions = {
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true, 
+};
+
+app.use(cors(corsOptions));
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
@@ -41,7 +47,7 @@ app.use('/api/threads', threadRoutes);
 
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html')); 
 });
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -53,6 +59,11 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.log(err));
 
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);  // Log the error
+  res.status(500).send('Something went wrong!');
+});
 
 
 // Start Server
