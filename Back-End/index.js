@@ -17,12 +17,12 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true }
 }));
-const buildPath = path.join(__dirname, 'build');
+
 // Middleware
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(buildPath));
+app.use(express.static(path.join(__dirname, 'build')));
 app.use('/uploads',express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser()); 
 app.use(cors());
@@ -41,7 +41,7 @@ app.use('/api/threads', threadRoutes);
 
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 mongoose.connect(process.env.MONGO_URI, {
