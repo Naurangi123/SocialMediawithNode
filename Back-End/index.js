@@ -15,16 +15,16 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: { secure: true }
 }));
 
 // Middleware
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use('/uploads',express.static(path.join(__dirname, "uploads")));
-app.use(express.static(path.join(__dirname, 'socialfront/build')));
-
+const buildPath = path.join(__dirname, '..', 'socialfront', 'build');
+app.use(express.static(buildPath));
+app.use('/uploads',express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser()); 
 app.use(cors());
 
@@ -42,7 +42,7 @@ app.use('/api/threads', threadRoutes);
 
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'socialfront/build', 'index.html'));
+  res.sendFile(path.join(buildPath, 'index.html'));
 });
 
 mongoose.connect(process.env.MONGO_URI, {
