@@ -1,4 +1,12 @@
-.register,.login,.create_post {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+.register,.login{
   background: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   padding: 40px 60px;
@@ -7,7 +15,7 @@
   text-align: center;
   backdrop-filter: blur(8px);
   animation: fadeIn 1s ease-out;
-  margin: 10px;
+  margin-top: 100px;
   margin-left: 400px;
 }
 
@@ -88,7 +96,7 @@ input[type="file"] {
   background: none;
   border: none;
   padding: 10px;
-  color: #512b26;
+  background-color: #b1b3af;
   font-size: 16px;
   margin-top: 10px;
   cursor: pointer;
@@ -96,7 +104,7 @@ input[type="file"] {
 }
 
 input[type="file"]:hover {
-  background: rgba(11, 6, 6, 0.868);
+  background: rgba(106, 103, 103, 0.868);
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
@@ -118,4 +126,29 @@ input[type="file"]:hover {
   .register,.login,.create_post {
       margin-top: 5px;
   }
+}
+
+
+.create_post {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 40px 60px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  width: 500px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  animation: fadeIn 1s ease-out;
+  margin-top: 100px;
+  margin-left: 400px;
+}
+
+.create_post>form>textarea{
+  margin-top: 10px;
+  padding: 12px;
+  width: 100%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  color: #071b33;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
 }

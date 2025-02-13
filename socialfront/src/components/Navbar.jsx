@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../style/base.css'
-import '../style/nav.css'
+import '../styles/nav.css'
+import { RiLogoutCircleRLine } from "react-icons/ri";
 
 
 
@@ -16,7 +16,7 @@ const Navbar = ({ isAuthenticated, handleLogout }) => {
             <li><Link to="/profile">Profile</Link></li>
             {/* <li><Link to="/msg">Message</Link></li> */}
             <li>
-              <button className='logout_btn' onClick={handleLogout}>Logout</button>
+              <button className='logout_btn' onClick={handleLogout}><RiLogoutCircleRLine/></button>
             </li>
           </>
         ) : (

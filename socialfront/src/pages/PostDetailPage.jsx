@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import api from '../services/api';
-import '../style/base.css'
-import '../style/post.css';
+import '../styles/post.css';
 
 
 const PostDetailPage = () => {

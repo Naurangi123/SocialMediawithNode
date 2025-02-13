@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import '../style/base.css'
-import '../style/post.css';
+import '../styles/register.css';
 
 
 const CreatePost = () => {
@@ -12,6 +11,7 @@ const CreatePost = () => {
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null); 
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate();
 
@@ -45,6 +45,7 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     if (!title || !content || !image) {
       setError('Title, content, and image are required.');
@@ -101,7 +102,7 @@ const CreatePost = () => {
           required
           placeholder="Enter post title"
         />
-        <textarea style={{width:'280px', height:'50px'}}
+        <textarea
           id="content"
           value={content}
           onChange={handleContentChange}
@@ -114,7 +115,7 @@ const CreatePost = () => {
           accept="image/*"
           onChange={handleImageChange}
         />
-        <button type="submit">Create Post</button>
+        <button className='login_btn' disabled={loading} type="submit">{loading ? 'Posting...' : 'Create Post'}</button>
       </form>
     </div>
     </>

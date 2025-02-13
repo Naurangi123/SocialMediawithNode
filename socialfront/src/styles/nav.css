@@ -1,8 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
 nav {
-  background-color: #c858e7;
-  padding: 10px 30px;
-  position: sticky;
-  margin-top: 0;
+  background-color: #c858e790;
+  padding: 15px 30px;
+  position: fixed;
+  width: 100%;
+  top: 0;
 }
 
 ul {
@@ -43,7 +52,7 @@ a::after {
   left: 0;
 }
 .logout_btn {
-  background-color: #e74c3c;
+  background-color: #938e8e;
   color: white;
   border: none;
   padding: 5px 10px;
@@ -53,7 +62,7 @@ a::after {
 }
 
 button:hover {
-  background-color: #c0392b;
+  background-color: #fa1b02;
 
 }
   @media (max-width: 768px) {
