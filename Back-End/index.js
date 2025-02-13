@@ -22,7 +22,9 @@ app.use(session({
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/uploads',express.static(path.join(__dirname, "uploads")));
+// app.use('/uploads',express.static(path.join(__dirname, "uploads")));
+app.use(express.static(path.join(__dirname, 'socialfront/build')));
+
 app.use(cookieParser()); 
 app.use(cors());
 
@@ -39,6 +41,9 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/threads', threadRoutes);
 
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'socialfront/build', 'index.html'));
+});
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
