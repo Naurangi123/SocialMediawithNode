@@ -32,7 +32,7 @@ exports.createPost = async (req, res) => {
 
 exports.getPosts = async (req, res) => {
   try {
-    const posts = await Post.find({})
+    const posts = await Post.find()
       .populate('user', 'username photo bio') 
       .populate({
         path: 'comments',
