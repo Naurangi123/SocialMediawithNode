@@ -19,7 +19,7 @@ const CreatePost = () => {
     const fetchUserProfile = async () => {
       const token = sessionStorage.getItem('token');
       if (!token) {
-        setError('No authentication token found');
+        navigate('/login')
         return;
       }
       setToken(token); 

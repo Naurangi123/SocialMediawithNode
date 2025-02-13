@@ -24,6 +24,7 @@ const PostDetailPage = () => {
       const storedToken = sessionStorage.getItem('token');
       if (!storedToken) {
         setError('No authentication token found');
+        navigate('/login')
         return;
       }
       setToken(storedToken);
