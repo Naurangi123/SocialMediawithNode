@@ -42,12 +42,14 @@ const conn = mongoose.createConnection(mongoURI, { useNewUrlParser: true, useUni
 const storage = multer.memoryStorage(); 
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true); 
-    cb(new Error('Invalid file type'), false); 
+  // Check if the file is an image by looking for the 'image/' prefix in its MIME type
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);  // Accept the image file
+  } else {
+    cb(new Error('Invalid file type, only images are allowed'), false);  // Reject non-image files
   }
 };
+
 
 // Create multer upload middleware
 const upload = multer({
