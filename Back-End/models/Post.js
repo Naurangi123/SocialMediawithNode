@@ -20,7 +20,9 @@ const PostSchema = new mongoose.Schema({
   //   type: String,
   //   required: false
   // },
-  image: Buffer,
+  image:{
+    type:Buffer
+  },
   likeCount: { type: Number, default: 0 },
   dislikeCount: { type: Number, default: 0 },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],

@@ -36,7 +36,7 @@ const PostPage = () => {
   return (
     <div className="posts-container">
       {posts.map((post) => (
-        <div key={post._id} className="post-card" onClick={() => handlePostClick(post._id)}>
+        <div key={post._id} className="post-card">
           <div className="post-header">
             <img
               src={`https://socialmediawithnode.onrender.com/${post.user.photo}`}
@@ -48,8 +48,8 @@ const PostPage = () => {
               <span className="timestamp">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
-          <div className="post-image">
-            <img src={`https://socialmediawithnode.onrender.com/uploads/${post.image}`} alt={post.user.username} />
+          <div className="post-image" onClick={() => handlePostClick(post._id)}>
+            <img src={`${api}/api/posts/data:image/*;base64,${post.image}`} alt={post.user.username} />
           </div>
           <div className="post-content">
             <p>{post.content}</p>

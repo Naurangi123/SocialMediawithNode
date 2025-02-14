@@ -30,6 +30,25 @@ exports.createPost = async (req, res) => {
   }
 };
 
+// exports.getPosts = async (req, res) => {
+//   try {
+//     const posts = await Post.find()
+//       .populate('user', 'username photo bio') 
+//       .populate({
+//         path: 'comments',
+//         populate: { 
+//           path: 'user', 
+//           select: 'username photo' 
+//         }
+//       })
+//       .sort({ createdAt: -1 });
+
+//     return res.json(posts);
+//   } catch (err) {
+//     res.status(500).json({ message: 'Server error', err: err.message });
+//   }
+// };
+
 exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
@@ -43,11 +62,24 @@ exports.getPosts = async (req, res) => {
       })
       .sort({ createdAt: -1 });
 
-    return res.json(posts);
+    // Process posts to convert image buffers to base64 strings
+    const postsWithBase64Images = posts.map(post => {
+      const postData = post.toObject(); // Convert mongoose document to plain JavaScript object
+
+      // Convert image buffer to base64 if image exists
+      if (postData.image) {
+        postData.image = postData.image.toString('base64');  // Convert Buffer to Base64 string
+      }
+
+      return postData;  // Return the updated post
+    });
+
+    return res.json(postsWithBase64Images); // Return posts with images as base64 strings
   } catch (err) {
     res.status(500).json({ message: 'Server error', err: err.message });
   }
 };
+
 exports.getPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params._id)
