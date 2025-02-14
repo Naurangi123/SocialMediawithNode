@@ -39,7 +39,7 @@ const PostPage = () => {
         <div key={post._id} className="post-card">
           <div className="post-header">
             <img
-              src={`https://socialmediawithnode.onrender.com/${post.user.photo}`}
+              src={`data:image/*;base64,${post.user.photo}`}
               alt={post.user.username}
               className="user-avatar"
             />

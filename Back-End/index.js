@@ -39,13 +39,11 @@ app.use(cors());
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const commentRoutes = require('./routes/commentRoutes');
-const threadRoutes = require('./routes/threadRoutes')
 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
-app.use('/api/threads', threadRoutes);
 
 
 app.get('*', (req, res) => {

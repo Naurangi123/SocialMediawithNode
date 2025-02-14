@@ -21,6 +21,7 @@ const Profile = () => {
         },
       });
       setUser(response.data);
+      console.log(response.data);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     }
@@ -48,7 +49,7 @@ const Profile = () => {
     <div className="profile">
       <h2>Profile</h2>
       <div className="profile-header">
-        <img src={`http://localhost:8000/uploads/${user.photo}`} alt={user.username} className="profile-img" />
+        <img src={`data:image/*;base64,${user.photo}`} alt={user.username} className="profile-img" />
         <div className="profile-info">
           <h3 className="profile-username">{user.username}</h3>
           <h4 className="profile-email">{user.email}</h4>
