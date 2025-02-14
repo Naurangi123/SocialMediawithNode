@@ -39,7 +39,7 @@ const PostPage = () => {
         <div key={post._id} className="post-card" onClick={() => handlePostClick(post._id)}>
           <div className="post-header">
             <img
-              src={`http://localhost:8000/uploads/${post.user.photo}`}
+              src={`https://socialmediawithnode.onrender.com/${post.user.photo}`}
               alt={post.user.username}
               className="user-avatar"
             />
@@ -49,7 +49,7 @@ const PostPage = () => {
             </div>
           </div>
           <div className="post-image">
-            <img src={`http://localhost:8000/uploads/${post.image}`} alt={post.user.username} />
+            <img src={`https://socialmediawithnode.onrender.com/uploads/${post.image}`} alt={post.user.username} />
           </div>
           <div className="post-content">
             <p>{post.content}</p>
