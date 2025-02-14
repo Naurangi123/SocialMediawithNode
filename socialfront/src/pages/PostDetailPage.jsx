@@ -193,7 +193,14 @@ const PostDetailPage = () => {
         <div className="comment-section">
           {comments.map((comment) => (
             <div key={comment._id} className="comment-item">
-              <img src={`data:image/*;base64,${comment.user.photo}`} alt={comment.user.username} className="user-avatar" />
+              {comment.user.photo && (
+                <img
+                  src={`data:image/jpeg;base64,${comment.user.photo}`}
+                  alt={comment.user.username}
+                  className="user-avatar"
+                />
+              )}
+              {/* <img src={`data:image/*;base64,${comment.user.photo}`} alt={comment.user.username} className="user-avatar" /> */}
               <p>{comment.user.username} | {comment.content}</p>
               <span className="timestamp">{moment(comment.createdAt).fromNow()}</span>
             </div>
