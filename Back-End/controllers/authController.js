@@ -27,7 +27,7 @@ exports.signUp = async (req, res) => {
     if (password !== confirmPassword) {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
-    const photo = req.file; 
+    const photo = req.file.buffer; 
 
     if (!photo && !req.body.photo) {
       return res.status(400).json({ message: "No image uploaded" });
@@ -38,7 +38,8 @@ exports.signUp = async (req, res) => {
       password,
       confirmPassword,
       bio,
-      photo: photo ? photo.filename : req.body.photo,
+      photo:req.file.buffer,
+      // photo: photo ? photo.filename : req.body.photo,
     });
 
     await user.save();

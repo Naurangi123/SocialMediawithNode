@@ -20,11 +20,7 @@ const PostSchema = new mongoose.Schema({
   //   type: String,
   //   required: false
   // },
-  image: {
-    filename: { type: String, required: true },
-    id: { type: mongoose.Schema.Types.ObjectId, required: true }, 
-    contentType: { type: String, required: true },
-  },
+  image: Buffer,
   likeCount: { type: Number, default: 0 },
   dislikeCount: { type: Number, default: 0 },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],

@@ -29,48 +29,31 @@
 
 const multer = require('multer');
 const mongoose = require('mongoose');
-const GridFsStorage = require('multer-gridfs-storage');
 const path = require('path');
 require('dotenv').config();
 
-// MongoDB URI
+// MongoDB URI from environment
 const mongoURI = process.env.MONGO_URI;
 
+// Create a MongoDB connection
 const conn = mongoose.createConnection(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-let gfs;
-conn.once('open', () => {
-  gfs = require('gridfs-stream')(conn.db, mongoose.mongo);
-  gfs.collection('uploads'); 
-});
-
-const storage = new GridFsStorage({
-  url: mongoURI,
-  file: (req, file) => {
-    return new Promise((resolve, reject) => {
-      const fileInfo = {
-        filename: Date.now() + path.extname(file.originalname), 
-        bucketName: 'uploads', 
-      };
-      resolve(fileInfo);
-    });
-  },
-});
+// Configure Multer to store files in memory
+const storage = multer.memoryStorage(); 
 
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
   if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type'), false);
+    cb(null, true); 
+    cb(new Error('Invalid file type'), false); 
   }
 };
 
 // Create multer upload middleware
 const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 },  // Limit file size to 5MB
-  fileFilter: fileFilter,
+  storage: storage, 
+  limits: { fileSize: 5 * 1024 * 1024 },  
+  fileFilter: fileFilter, 
 });
 
 module.exports = upload;

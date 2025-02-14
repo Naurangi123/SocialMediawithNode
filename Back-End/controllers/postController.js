@@ -9,7 +9,7 @@ exports.createPost = async (req, res) => {
   if (!user) {
     return res.status(401).json({ message: "User not found" });
   }
-  const image = req.file; 
+  const image = req.file.buffer; 
   if (!image && !req.body.image) {
     return res.status(400).json({ message: "No image uploaded" });
   }
@@ -18,7 +18,8 @@ exports.createPost = async (req, res) => {
       user: req.user,  
       title: title,
       content: content,
-      image: image ? image.filename : req.body.image 
+      image: req.file.buffer,
+      // image: image ? image.filename : req.body.image 
     });
 
     await post.save();
