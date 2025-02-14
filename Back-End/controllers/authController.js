@@ -121,16 +121,41 @@ exports.login = async (req, res) => {
 
 //   next();
 // }
-exports.userProfile=async(req,res)=>{
+// exports.userProfile=async(req,res)=>{
+//   try {
+//     const userId = req.user.id; 
+//     const user = await User.findById(userId).select('-password'); 
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+//     res.json(user);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// }
+
+exports.userProfile = async (req, res) => {
   try {
-    const userId = req.user.id; 
-    const user = await User.findById(userId).select('-password'); 
+    const userId = req.user.id;  // Assuming the user ID is in req.user.id (from authentication)
+    const user = await User.findById(userId).select('-password');  // Exclude the password field
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.json(user);
+
+    // Convert image buffer to base64 if it exists
+    const userData = user.toObject();  // Convert mongoose document to plain JavaScript object
+
+    // Check if the user has an image and convert to base64 if present
+    if (userData.photo) {
+      userData.photo = userData.photo.toString('base64');  // Convert image buffer to base64 string
+    }
+
+    return res.json(userData);  // Return the user with base64 image (if available)
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
-}
+};
+

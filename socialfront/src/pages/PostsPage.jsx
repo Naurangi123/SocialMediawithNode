@@ -49,7 +49,7 @@ const PostPage = () => {
             </div>
           </div>
           <div className="post-image" onClick={() => handlePostClick(post._id)}>
-            <img src={`${api}/api/posts/data:image/*;base64,${post.image}`} alt={post.user.username} />
+            <img src={`data:image/*;base64,${post.image}`} alt={post.user.username} />
           </div>
           <div className="post-content">
             <p>{post.content}</p>

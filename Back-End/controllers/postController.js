@@ -80,18 +80,46 @@ exports.getPosts = async (req, res) => {
   }
 };
 
+// exports.getPost = async (req, res) => {
+//   try {
+//     const post = await Post.findById(req.params._id)
+//      .populate('user', 'username photo bio')
+//      .populate({path: 'comments', populate: { path: 'user', select: 'username photo' }})
+     
+//     if (!post) return res.status(404).json({ message: 'Post not found' });
+//     return res.json(post);
+//   } catch (error) {
+//     return res.status(500).json({ message: 'Server error', err: error.message });
+//   }
+// }
+
 exports.getPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params._id)
-     .populate('user', 'username photo bio')
-     .populate({path: 'comments', populate: { path: 'user', select: 'username photo' }})
-     
-    if (!post) return res.status(404).json({ message: 'Post not found' });
-    return res.json(post);
+      .populate('user', 'username photo bio')
+      .populate({
+        path: 'comments',
+        populate: { path: 'user', select: 'username photo' }
+      });
+
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Convert image buffer to base64 if it exists
+    const postData = post.toObject(); // Convert mongoose document to plain JavaScript object
+
+    // Check if the post has an image and convert to base64 if present
+    if (postData.image) {
+      postData.image = postData.image.toString('base64'); // Convert image buffer to base64 string
+    }
+
+    return res.json(postData);  // Return the post with base64 image
   } catch (error) {
     return res.status(500).json({ message: 'Server error', err: error.message });
   }
-}
+};
+
 
 exports.deletePost = async (req, res) => {
   try {

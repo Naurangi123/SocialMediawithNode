@@ -27,7 +27,8 @@ const buildPath = path.join('..', 'build');
 
 app.use(express.static(buildPath));
 
-console.log('Building social front', buildPath)
+
+// console.log('Building social front', buildPath)
 
 app.use('/uploads',express.static(path.join(__dirname, "uploads")));
 

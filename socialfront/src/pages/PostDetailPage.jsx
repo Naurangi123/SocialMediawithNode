@@ -146,12 +146,12 @@ const PostDetailPage = () => {
       </div>
       <div className="post-detail-container">
         <div className="post_header" onClick={() => navigate('/profile')}>
-          <img src={`http://localhost:8000/uploads/${post.user.photo}`} alt={post.user.username} className="user-avatar" />
+          <img src={`data:image/*;base64,${post.user.photo}`} alt={post.user.username} className="user-avatar" />
           <span className="username">{post.user.username}</span>
           <span className="timestamp">{moment(post.createdAt).fromNow()}</span>
         </div>
         <div className="post_image">
-          <img src={`http://localhost:8000/uploads/${post.image}`} alt={post.user.username} />
+          <img src={`data:image/*;base64,${post.image}`} alt={post.user.username} />
         </div>
         <div className="post-content">
           <p>{post.content}</p>
@@ -193,7 +193,7 @@ const PostDetailPage = () => {
         <div className="comment-section">
           {comments.map((comment) => (
             <div key={comment._id} className="comment-item">
-              <img src={`http://localhost:8000/uploads/${comment.user.photo}`} alt={comment.user.username} className="user-avatar" />
+              <img src={`data:image/*;base64,${comment.user.photo}`} alt={comment.user.username} className="user-avatar" />
               <p>{comment.user.username} | {comment.content}</p>
               <span className="timestamp">{moment(comment.createdAt).fromNow()}</span>
             </div>
