@@ -16,9 +16,14 @@ const PostSchema = new mongoose.Schema({
     type: String, 
     required: true
   },
-  image:{
-    type: String,
-    required: false
+  // image:{
+  //   type: String,
+  //   required: false
+  // },
+  image: {
+    filename: { type: String, required: true },
+    id: { type: mongoose.Schema.Types.ObjectId, required: true }, 
+    contentType: { type: String, required: true },
   },
   likeCount: { type: Number, default: 0 },
   dislikeCount: { type: Number, default: 0 },
