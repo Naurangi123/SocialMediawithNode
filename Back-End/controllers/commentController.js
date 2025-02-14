@@ -31,27 +31,60 @@ exports.addComment = async (req, res) => {
   }
 };
 
+// exports.getComments = async (req, res) => {
+//   try {
+//     const postId = req.params.postId;  // Get the postId from the request parameters
+//     // Find comments for the particular post and populate relevant fields
+//     const comment = await Comment.find({ post: postId })
+//     .populate('user', 'username photo')
+//     .populate({ 
+//         path: 'post', 
+//         select: 'postId',
+//         populate: { 
+//             path: 'comments', 
+//             select: 'content' 
+//         }
+//     })
+//     .sort({ createdAt: -1 });
+
+//     if (!comment) {
+//         return res.status(404).json({ message: 'Comments not found for this post' });
+//       }
+//       res.json(comment);
+//     } catch (error) {
+//       return res.status(500).json({ message: 'Server error', err: error.message });
+//   }
+// }
+
 exports.getComments = async (req, res) => {
   try {
     const postId = req.params.postId;  // Get the postId from the request parameters
     // Find comments for the particular post and populate relevant fields
-    const comment = await Comment.find({ post: postId })
-    .populate('user', 'username photo')
-    .populate({ 
+    const comments = await Comment.find({ post: postId })
+      .populate('user', 'username photo') // Assuming 'photo' is a buffer field
+      .populate({ 
         path: 'post', 
         select: 'postId',
         populate: { 
-            path: 'comments', 
-            select: 'content' 
+          path: 'comments', 
+          select: 'content' 
         }
-    })
-    .sort({ createdAt: -1 });
+      })
+      .sort({ createdAt: -1 });
 
-    if (!comment) {
-        return res.status(404).json({ message: 'Comments not found for this post' });
+    if (!comments || comments.length === 0) {
+      return res.status(404).json({ message: 'Comments not found for this post' });
+    }
+
+    // Convert photo buffer to base64 string if it exists
+    comments.forEach(comment => {
+      if (comment.user && comment.user.photo) {
+        comment.user.photo = comment.user.photo.toString('base64');
       }
-      res.json(comment);
-    } catch (error) {
-      return res.status(500).json({ message: 'Server error', err: error.message });
+    });
+
+    res.json(comments); // Send the modified comments with base64 images
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error', err: error.message });
   }
-}
+};
