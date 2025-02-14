@@ -58,10 +58,9 @@ exports.addComment = async (req, res) => {
 
 exports.getComments = async (req, res) => {
   try {
-    const postId = req.params.postId;  // Get the postId from the request parameters
-    // Find comments for the particular post and populate relevant fields
-    const comments = await Comment.find({ post: postId })
-      .populate('user', 'username photo') // Assuming 'photo' is a buffer field
+    const postId = req.params.postId;
+    const comment = await Comment.find({ post: postId })
+      .populate('user', 'username photo') 
       .populate({ 
         path: 'post', 
         select: 'postId',
@@ -72,18 +71,18 @@ exports.getComments = async (req, res) => {
       })
       .sort({ createdAt: -1 });
 
-    if (!comments || comments.length === 0) {
+    if (!comment || comment.length === 0) {
       return res.status(404).json({ message: 'Comments not found for this post' });
     }
 
     // Convert photo buffer to base64 string if it exists
-    comments.forEach(comment => {
-      if (comment.user && comment.user.photo) {
-        comment.user.photo = comment.user.photo.toString('base64');
+    comment.map(comnt => {
+      if (comnt.user.photo) {
+        comnt.user.photo = comnt.user.photo.toString('base64');
       }
     });
 
-    res.json(comments); // Send the modified comments with base64 images
+    return res.json(comment); // Send the modified comments with base64 images
   } catch (error) {
     return res.status(500).json({ message: 'Server error', err: error.message });
   }
